@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - TrewJewel Bridal Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="payment-page">
+    <header class="site-header">
+        <a class="logo" href="home.html">
+            <img src="TREW-LOGO (1).png" alt="TrewJewel Bridal Store Logo" width="100" height="100">
+        </a>
+
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav class="header-nav">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="ServicePage.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="payment-container">
+        <section class="payment-hero">
+            <h1 class="page-title">PAYMENT</h1>
+            <p class="page-subtitle">Complete your purchase securely</p>
+        </section>
+
+        <section class="payment-content">
+            <div class="payment-product-summary">
+                <h2>Order Summary</h2>
+                <div id="paymentSummary" class="summary-details">
+                    <p class="loading">Loading product details...</p>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h2>Payment Methods</h2>
+
+                <!-- Paystack Payment -->
+                <div class="payment-method-card">
+                    <div class="method-header">
+                        <h3>💳 Card / Bank Transfer</h3>
+                        <p>Pay with your debit/credit card or bank transfer</p>
+                    </div>
+                    <button id="paystackPayBtn" class="pay-btn">
+                        Pay Now with Paystack
+                    </button>
+                </div>
+
+                <!-- QR Code Payment -->
+                <div class="payment-method-card">
+                    <div class="method-header">
+                        <h3>📱 Scan QR Code</h3>
+                        <p>Scan the QR code below to make payment</p>
+                    </div>
+                    <div id="qrCodeContainer" class="qr-code-container">
+                        <p class="loading">Generating QR code...</p>
+                    </div>
+                </div>
+
+                <!-- Manual Bank Transfer -->
+                <div class="payment-method-card">
+                    <div class="method-header">
+                        <h3>🏦 Direct Bank Transfer</h3>
+                        <p>Transfer funds directly to our account</p>
+                    </div>
+                    <div class="bank-details">
+                        <p><strong>Bank Name:</strong> First Bank Nigeria</p>
+                        <p><strong>Account Name:</strong> TrewJewel Bridal Store</p>
+                        <p><strong>Account Number:</strong> 2000123456</p>
+                        <p><strong>Amount:</strong> <span id="transferAmount">#0.00</span></p>
+                        <p style="color: #d48ba3; margin-top: 10px;"><strong>⚠️ After transfer, contact us with your proof of payment</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="payment-footer-nav">
+            <a href="cart.html" class="back-btn">← Back to Cart</a>
+            <a href="home.html" class="home-btn">Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 TrewJewel Bridal Store. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Paystack Script -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

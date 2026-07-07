@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TrewJewel Bridal Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+
+<div class="logo">
+  <a href="home.html"><img src="TREW-LOGO (1).png" alt="TrewJewel Logo" width="100" height="100"></a>
+</div>
+
+<button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+ <nav class="header-nav">
+  <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="ServicePage.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+</header>
+
+   <section class="contact">
+
+     <h1>Contact Us</h1>
+     <p class="contact-intro">Please write a review about your experience with Trewjewel. For more information about the business, click the social media icons below.</p>
+
+   <form id="contactForm" method="POST" action="/contact">
+
+          <input type="text" id="name" name="name" placeholder="Your Name" required>
+         <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+        <textarea id="message" name="message" placeholder="Write your review or message here" required></textarea>
+
+         <input type="hidden" id="csrfToken" name="csrfToken" value="">
+         <button type="submit">Send Review</button>
+
+   </form>
+
+
+   <div class="socials">
+
+      <a href="https://www.instagram.com/trewjewelbeads?igsh=MmJkNWc0ZXQxOXFp&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+     <a href="https://w.app/msogvd" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+     <a href="https://www.tiktok.com/@trewjewel" target="_blank" rel="noopener noreferrer">TikTok</a>
+
+   </div>
+
+  </section>
+     
+     <footer>
+          <p>© 2026 TrewJewel Bridal Store. All Rights Reserved.</p>
+     </footer>
+
+     <script src="script.js"></script>
+ </body>
+</html>
