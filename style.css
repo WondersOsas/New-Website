@@ -675,17 +675,18 @@ SERVICES PAGE
     margin: 0 auto;
 }
 
-.services-grid {
+.services-grid{
 
-    display: flex;
+    display:grid;
 
-    flex-wrap: nowrap;
+    grid-template-columns:repeat(2,1fr);
 
-    gap: 24px;
+    gap:30px;
 
-    overflow-x: auto;
+    max-width:1000px;
 
-    scroll-behavior: smooth;
+    margin:0 auto;
+
 }
 
 .service-card {
@@ -2348,11 +2349,25 @@ gap:20px;
 
 .services-grid{
 
-display:grid;
+    grid-template-columns:repeat(2,1fr);
 
-grid-template-columns:1fr;
+    gap:15px;
 
-gap:20px;
+}
+
+.service-card{
+
+    padding:20px;
+
+}
+
+@media screen and (max-width:480px){
+
+    .services-grid{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
@@ -2368,26 +2383,34 @@ gap:20px;
 
 }
 
-/* Testimonials */
+/* ===========================
+   Testimonials
+=========================== */
+
+.testimonials{
+    width:100%;
+    overflow:hidden;
+    padding:40px 20px;
+}
 
 .testimonial-slider{
+    display:flex;
+    overflow:hidden;
+    width:100%;
+}
 
-width:100%;
-
+.testimonial-track{
+    display:flex;
+    transition:transform .5s ease;
+    width:100%;
 }
 
 .testimonial-card{
-
-min-width:100%;
-
-}
-
-/* Cart */
-
-.cart-product-wrapper{
-
-grid-template-columns:1fr;
-
+    flex:0 0 100%;
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    padding:20px;
 }
 
 /* Payment */
