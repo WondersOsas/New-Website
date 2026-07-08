@@ -2186,39 +2186,267 @@ transform:translateY(0);
 
 }
 
-/* ==========================
-RESPONSIVE
-========================== */
+/* ======================================================
+   MOBILE RESPONSIVENESS
+====================================================== */
 
-@media(max-width:768px){
+@media screen and (max-width:768px){
 
-header{
-
-flex-direction:column;
-
-gap:20px;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
 }
 
-nav ul{
+/* Header */
+
+.site-header{
+
+padding:15px 20px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.logo img{
+
+width:65px;
+
+height:65px;
+
+}
+
+.nav-toggle{
+
+display:flex;
+
+margin-left:auto;
+
+}
+
+/* Navigation */
+
+.header-nav{
+
+width:100%;
+
+left:0;
+
+right:0;
+
+top:100%;
+
+}
+
+.header-nav ul{
+
+display:flex;
 
 flex-direction:column;
+
+gap:15px;
+
+padding:20px;
 
 text-align:center;
+
 }
 
-.contact h1{
+/* Hero */
+
+.hero{
+
+padding:80px 20px;
+
+}
+
+.hero-content{
+
+width:100%;
+
+}
+
+.hero-content h1{
 
 font-size:2rem;
+
 }
 
-form{
+.hero-content p{
 
-padding:30px;
+font-size:1rem;
+
 }
 
-.socials{
+/* Featured Collection */
+
+.featured-container{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:25px;
+
+}
+
+/* Product Cards */
+
+.card{
+
+width:100%;
+
+max-width:400px;
+
+margin:auto;
+
+}
+
+.card img{
+
+width:100%;
+
+height:auto;
+
+}
+
+.card button{
+
+width:100%;
+
+}
+
+/* Features */
+
+.features{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:20px;
+
+}
+
+/* Gallery */
+
+.gallery-grid{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:20px;
+
+}
+
+/* Services */
+
+.services-grid{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:20px;
+
+}
+
+/* Why Choose Us */
+
+.why-grid{
+
+display:grid;
+
+grid-template-columns:1fr;
+
+gap:20px;
+
+}
+
+/* Testimonials */
+
+.testimonial-slider{
+
+width:100%;
+
+}
+
+.testimonial-card{
+
+min-width:100%;
+
+}
+
+/* Cart */
+
+.cart-product-wrapper{
+
+grid-template-columns:1fr;
+
+}
+
+/* Payment */
+
+.payment-content{
+
+grid-template-columns:1fr;
+
+}
+
+.payment-footer-nav{
+
+display:flex;
 
 flex-direction:column;
+
+gap:15px;
+
+}
+
+.back-btn,
+.home-btn{
+
+width:100%;
+
+text-align:center;
+
+}
+
+/* Contact */
+
+.contact{
+
+padding:30px 20px;
+
+}
+
+.contact form{
+
+width:100%;
+
+}
+
+.contact input,
+.contact textarea,
+.contact button{
+
+width:100%;
+
+}
+
+/* Footer */
+
+footer{
+
+padding:30px 20px;
+
+text-align:center;
+
 }
 
 }
