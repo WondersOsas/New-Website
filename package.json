@@ -1,0 +1,22 @@
+{
+  "name": "trewjewel-website",
+  "version": "1.0.0",
+  "description": "TrewJewel Bridal Store - E-commerce website with Hono backend",
+  "main": "hono.js",
+  "scripts": {
+    "start": "node hono.js",
+    "dev": "node --watch hono.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WondersOsas/New-Website.git"
+  },
+  "keywords": ["bridal", "ecommerce", "trewjewel"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/WondersOsas/New-Website/issues"
+  },
+  "homepage": "https://github.com/WondersOsas/New-Website#readme"
+}

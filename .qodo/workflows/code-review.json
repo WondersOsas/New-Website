@@ -1,0 +1,44 @@
+{
+  "name": "Code Review Workflow",
+  "description": "Automated code review workflow for TrewJewel website",
+  "triggers": {
+    "onSave": false,
+    "onCommit": true,
+    "onPullRequest": true
+  },
+  "steps": [
+    {
+      "name": "Security Review",
+      "enabled": true,
+      "checks": [
+        "XSS vulnerabilities in user input handling",
+        "CSRF token validation",
+        "SQL injection patterns",
+        "Path traversal in file serving",
+        "Security headers presence"
+      ]
+    },
+    {
+      "name": "Code Quality",
+      "enabled": true,
+      "checks": [
+        "Duplicate CSS rules",
+        "Broken HTML structure",
+        "JavaScript error handling",
+        "Proper async/await usage",
+        "Memory leak patterns"
+      ]
+    },
+    {
+      "name": "Best Practices",
+      "enabled": true,
+      "checks": [
+        "Semantic HTML elements",
+        "CSS organization and specificity",
+        "JavaScript modern syntax",
+        "Accessibility attributes",
+        "Mobile responsiveness"
+      ]
+    }
+  ]
+}

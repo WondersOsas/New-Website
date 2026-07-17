@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "description": "Default agent for code review and analysis",
+  "enabled": true,
+  "rules": [
+    "Review all code changes for potential bugs, security issues, and performance problems",
+    "Ensure HTML follows semantic markup best practices",
+    "Verify CSS doesn't have duplicate or conflicting rules",
+    "Check JavaScript for proper error handling and edge cases",
+    "Ensure backend security measures are properly implemented",
+    "Verify mobile responsiveness in CSS"
+  ],
+  "review": {
+    "enabled": true,
+    "autoReview": true,
+    "reviewOnSave": false,
+    "reviewOnCommit": true,
+    "severity": ["error", "warning", "info"],
+    "categories": ["security", "performance", "bugs", "best-practices", "accessibility"]
+  }
+}

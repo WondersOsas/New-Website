@@ -1,4 +1,7 @@
+const { serve } = require("@hono/node-server");
 const { Hono } = require("hono");
+const { readFile } = require("fs/promises");
+const path = require("path");
 
 const app = new Hono();
 
@@ -73,7 +76,7 @@ const generateSessionId = () => {
 
 const csrfTokens = new Map();
 
-const requireAdmin = (c, next) => {
+const requireAdmin = async (c, next) => {
   const sessionId = c.req.header("x-session-id");
   const session = sessionId ? sessions.get(sessionId) : null;
 
@@ -85,15 +88,18 @@ const requireAdmin = (c, next) => {
   return next();
 };
 
+// Security middleware
 app.use("*", async (c, next) => {
   const method = c.req.method.toUpperCase();
-  const path = new URL(c.req.url).pathname;
 
   if (!["GET", "POST", "OPTIONS"].includes(method)) {
     return c.json({ error: "Method not allowed" }, 405);
   }
 
-  if (/[<>"'`]/.test(path) || /%2e%2e|\/\.\//i.test(path) || path.includes("..")) {
+  const url = new URL(c.req.url);
+  const pathname = url.pathname;
+
+  if (/[<>"'`]/.test(pathname) || /%2e%2e|\/\.\//i.test(pathname) || pathname.includes("..")) {
     c.header("Cache-Control", "no-store");
     return c.json({ error: "Invalid request path" }, 400);
   }
@@ -110,10 +116,9 @@ app.use("*", async (c, next) => {
   c.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
   c.header(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
+    "default-src 'self'; script-src 'self' https://js.paystack.co 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
   );
   c.header("X-XSS-Protection", "1; mode=block");
-  c.header("Cache-Control", "no-store");
 
   await next();
 });
@@ -204,6 +209,63 @@ app.post("/contact", async (c) => {
   });
 
   return c.json({ success: true, message: "Review received securely." });
+});
+
+// Serve static files (HTML, CSS, JS, images) from the current directory
+app.get("/*", async (c) => {
+  const url = new URL(c.req.url);
+  let filePath = url.pathname;
+
+  // Default to index.html for root
+  if (filePath === "/" || filePath === "") {
+    filePath = "/home.html";
+  }
+
+  // Only serve from current directory (prevent directory traversal)
+  const normalizedPath = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, "");
+  const fullPath = path.join(__dirname, normalizedPath);
+
+  // Security check: ensure resolved path is within our directory
+  if (!fullPath.startsWith(__dirname)) {
+    return c.json({ error: "Forbidden" }, 403);
+  }
+
+  try {
+    const content = await readFile(fullPath);
+    const ext = path.extname(fullPath).toLowerCase();
+
+    const mimeTypes = {
+      ".html": "text/html",
+      ".css": "text/css",
+      ".js": "application/javascript",
+      ".json": "application/json",
+      ".png": "image/png",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".gif": "image/gif",
+      ".svg": "image/svg+xml",
+      ".ico": "image/x-icon",
+      ".pdf": "application/pdf",
+      ".md": "text/markdown",
+    };
+
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+    c.header("Content-Type", contentType);
+    return c.body(content);
+  } catch (err) {
+    // File not found - return index.html for SPA-like fallback if needed
+    return c.json({ error: "Not found" }, 404);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+
+serve({
+  fetch: app.fetch,
+  port: PORT
+}, (info) => {
+  console.log(`🚀 TrewJewel server running at http://localhost:${info.port}`);
+  console.log(`📁 Serving static files from: ${__dirname}`);
 });
 
 module.exports = app;

@@ -149,72 +149,63 @@ if (testimonialSlider && testimonialTrack) {
 
     const getDistance = () => Math.max(0, testimonialTrack.scrollWidth - testimonialSlider.clientWidth);
 
-    const slideTestimonials = (direction = 'auto') => {
+    const slideTestimonials = (direction) => {
         const distance = getDistance();
 
-        if (distance <= 0) {
-            return;
-        }
+        if (distance <= 0) return;
 
         if (direction === 'left') {
             currentOffset = Math.max(currentOffset - 320, 0);
         } else if (direction === 'right') {
             currentOffset = Math.min(currentOffset + 320, distance);
         } else {
-            currentOffset = distance;
+            // Auto mode for loop - reset to start
+            currentOffset = 0;
+            testimonialTrack.style.transition = 'none';
+            testimonialTrack.style.transform = 'translateX(0)';
+            requestAnimationFrame(() => {
+                testimonialTrack.style.transition = 'transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)';
+            });
+            return;
         }
 
         testimonialTrack.style.transition = 'transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)';
         testimonialTrack.style.transform = `translateX(-${currentOffset}px)`;
     };
 
-    const resetTestimonials = () => {
-        currentOffset = 0;
-        testimonialTrack.style.transition = 'none';
-        testimonialTrack.style.transform = 'translateX(0)';
-        requestAnimationFrame(() => {
-            testimonialTrack.style.transition = 'transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)';
-        });
-    };
-
     const startLoop = () => {
         clearInterval(loopTimer);
         loopTimer = setInterval(() => {
             if (!isPaused) {
-                resetTestimonials();
-                setTimeout(() => slideTestimonials('auto'), 80);
+                slideTestimonials('auto');
             }
-        }, 3200);
+        }, 5000);
     };
 
     testimonialSlider.addEventListener('mouseenter', () => {
         isPaused = true;
-        testimonialTrack.style.transition = 'transform 0.35s ease';
     });
 
     testimonialSlider.addEventListener('mouseleave', () => {
         isPaused = false;
-        slideTestimonials();
     });
 
     testimonialArrows.forEach((button) => {
         button.addEventListener('click', () => {
             const direction = button.dataset.direction;
-            if (!isPaused) {
-                isPaused = true;
-            }
-            if (direction === 'left') {
-                slideTestimonials('left');
-            } else {
-                slideTestimonials('right');
-            }
+            isPaused = true;
+            clearInterval(loopTimer);
+            slideTestimonials(direction);
+            setTimeout(() => {
+                isPaused = false;
+                startLoop();
+            }, 8000);
         });
     });
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                slideTestimonials();
                 startLoop();
             }
         });
@@ -224,8 +215,9 @@ if (testimonialSlider && testimonialTrack) {
 
     window.addEventListener('resize', () => {
         if (!isPaused) {
-            resetTestimonials();
-            setTimeout(() => slideTestimonials('auto'), 80);
+            currentOffset = 0;
+            testimonialTrack.style.transition = 'none';
+            testimonialTrack.style.transform = 'translateX(0)';
         }
     });
 }
@@ -240,17 +232,14 @@ addToCartButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
         event.preventDefault();
 
-        // Get the product card
         const card = button.closest('.card');
         if (!card) return;
 
-        // Extract product details
         const image = card.querySelector('img')?.src || '';
         const title = card.querySelector('h1, h3')?.textContent || 'Product';
         const priceText = card.querySelector('.price')?.textContent || '#0.00';
         const description = card.querySelectorAll('p')[1]?.textContent || '';
 
-        // Create product object
         const product = {
             image,
             title,
@@ -258,7 +247,6 @@ addToCartButtons.forEach((button) => {
             description
         };
 
-        // Store in localStorage and redirect
         localStorage.setItem('cartProduct', JSON.stringify(product));
         window.location.href = 'cart.html';
     });
@@ -310,10 +298,6 @@ if (document.body.classList.contains('cart-page') || window.location.pathname.in
         `;
     };
 
-    // Display cart when page loads
-    document.addEventListener('DOMContentLoaded', displayCart);
-
-    // Handle payment button - redirect to payment page
     window.handlePayment = function() {
         window.location.href = 'payment.html';
     };
@@ -328,7 +312,6 @@ PAYMENT PAGE FUNCTIONALITY
 if (document.body.classList.contains('payment-page') || window.location.pathname.includes('payment.html')) {
     const displayPaymentSummary = () => {
         const summaryDiv = document.getElementById('paymentSummary');
-        const qrContainer = document.getElementById('qrCodeContainer');
         const transferAmountSpan = document.getElementById('transferAmount');
         const productData = localStorage.getItem('cartProduct');
 
@@ -370,21 +353,17 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
     const generateQRCode = (product) => {
         const qrContainer = document.getElementById('qrCodeContainer');
         const priceValue = product.price.replace(/[^0-9]/g, '');
-        
-        // Extract numeric price
         const amount = parseInt(priceValue) || 0;
 
-        // QR Code data - This can be customized based on payment method
         const qrData = `TrewJewel Payment\nProduct: ${product.title}\nAmount: ${product.price}`;
 
         qrContainer.innerHTML = '';
 
-        // Create QR code using QR Server API
         const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
-        
+
         qrContainer.innerHTML = `
             <div style="text-align: center;">
-                <img src="${qrCodeUrl}" alt="QR Code" style="max-width: 300px; border-radius: 12px; border: 2px solid #d48ba3;">
+                <img src="${qrCodeUrl}" alt="QR Code for ${product.title}" style="max-width: 300px; border-radius: 12px; border: 2px solid #d48ba3;">
                 <p style="margin-top: 15px; color: #5f6d85;">Scan this code to view payment details</p>
             </div>
         `;
@@ -392,24 +371,29 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
 
     const initializePaystack = (product) => {
         const paystackPayBtn = document.getElementById('paystackPayBtn');
+        if (!paystackPayBtn) return;
+
         const priceValue = product.price.replace(/[^0-9]/g, '');
         const amount = parseInt(priceValue) * 100; // Paystack expects amount in kobo
 
         paystackPayBtn.addEventListener('click', function() {
+            // Check if Paystack is loaded
+            if (typeof PaystackPop === 'undefined') {
+                alert('Payment system is loading. Please try again in a moment.');
+                return;
+            }
+
             const handler = PaystackPop.setup({
                 key: 'pk_test_YOUR_PUBLIC_KEY_HERE', // Replace with your actual Paystack public key
-                email: 'customer@example.com', // You can get this from user input form
+                email: 'customer@example.com',
                 amount: amount,
                 ref: 'TrewJewel_' + Math.floor((Math.random() * 1000000000) + 1),
-                publicKey: 'pk_test_YOUR_PUBLIC_KEY_HERE',
                 onClose: function() {
                     alert('Payment window closed.');
                 },
                 onSuccess: function(response) {
                     alert('Payment successful! Reference: ' + response.reference);
-                    // Send confirmation email or store payment record
                     console.log('Payment successful:', response);
-                    // Redirect to success page or clear cart
                     localStorage.removeItem('cartProduct');
                     window.location.href = 'home.html';
                 }
@@ -418,7 +402,5 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
         });
     };
 
-    // Display payment summary when page loads
-    document.addEventListener('DOMContentLoaded', displayPaymentSummary);
     displayPaymentSummary();
 }
