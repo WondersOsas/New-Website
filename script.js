@@ -1,10 +1,32 @@
+// ============================================
+// FLUID INK ANIMATION BACKGROUND
+// ============================================
+(function createInkBackground() {
+    const inkBg = document.createElement('div');
+    inkBg.className = 'ink-background';
+    
+    // Create fluid ink drops
+    for (let i = 0; i < 6; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'ink-drop';
+        inkBg.appendChild(drop);
+    }
+    
+    // Create ink burst particles
+    for (let i = 0; i < 6; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'ink-particle';
+        inkBg.appendChild(particle);
+    }
+    
+    document.body.prepend(inkBg);
+})();
+
+// ============================================
+// NAVIGATION TOGGLE
+// ============================================
 const navToggle = document.querySelector('.nav-toggle');
 const headerNav = document.querySelector('.header-nav');
-const testimonialSlider = document.querySelector('.testimonial-slider');
-const testimonialTrack = document.querySelector('.testimonial-track');
-const testimonialArrows = document.querySelectorAll('.testimonial-arrow');
-const contactForm = document.getElementById('contactForm');
-const csrfTokenInput = document.getElementById('csrfToken');
 
 if (navToggle && headerNav) {
     const openMenu = () => {
@@ -20,12 +42,8 @@ if (navToggle && headerNav) {
     navToggle.addEventListener('click', (event) => {
         event.stopPropagation();
         const isOpen = headerNav.classList.contains('open');
-
-        if (isOpen) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
+        if (isOpen) closeMenu();
+        else openMenu();
     });
 
     navToggle.addEventListener('mouseenter', openMenu);
@@ -38,6 +56,12 @@ if (navToggle && headerNav) {
         }
     });
 }
+
+// ============================================
+// CONTACT FORM / CSRF
+// ============================================
+const contactForm = document.getElementById('contactForm');
+const csrfTokenInput = document.getElementById('csrfToken');
 
 if (contactForm && csrfTokenInput) {
     const fetchCsrfToken = async () => {
@@ -97,6 +121,9 @@ if (contactForm && csrfTokenInput) {
     fetchCsrfToken();
 }
 
+// ============================================
+// REVIEWS PAGE
+// ============================================
 const reviewsList = document.getElementById('reviewsList');
 
 if (reviewsList) {
@@ -142,6 +169,13 @@ if (reviewsList) {
     renderReviews();
 }
 
+// ============================================
+// TESTIMONIAL SLIDER
+// ============================================
+const testimonialSlider = document.querySelector('.testimonial-slider');
+const testimonialTrack = document.querySelector('.testimonial-track');
+const testimonialArrows = document.querySelectorAll('.testimonial-arrow');
+
 if (testimonialSlider && testimonialTrack) {
     let isPaused = false;
     let loopTimer = null;
@@ -151,7 +185,6 @@ if (testimonialSlider && testimonialTrack) {
 
     const slideTestimonials = (direction) => {
         const distance = getDistance();
-
         if (distance <= 0) return;
 
         if (direction === 'left') {
@@ -159,7 +192,6 @@ if (testimonialSlider && testimonialTrack) {
         } else if (direction === 'right') {
             currentOffset = Math.min(currentOffset + 320, distance);
         } else {
-            // Auto mode for loop - reset to start
             currentOffset = 0;
             testimonialTrack.style.transition = 'none';
             testimonialTrack.style.transform = 'translateX(0)';
@@ -182,13 +214,8 @@ if (testimonialSlider && testimonialTrack) {
         }, 5000);
     };
 
-    testimonialSlider.addEventListener('mouseenter', () => {
-        isPaused = true;
-    });
-
-    testimonialSlider.addEventListener('mouseleave', () => {
-        isPaused = false;
-    });
+    testimonialSlider.addEventListener('mouseenter', () => { isPaused = true; });
+    testimonialSlider.addEventListener('mouseleave', () => { isPaused = false; });
 
     testimonialArrows.forEach((button) => {
         button.addEventListener('click', () => {
@@ -205,9 +232,7 @@ if (testimonialSlider && testimonialTrack) {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                startLoop();
-            }
+            if (entry.isIntersecting) startLoop();
         });
     }, { threshold: 0.3 });
 
@@ -222,10 +247,9 @@ if (testimonialSlider && testimonialTrack) {
     });
 }
 
-/* =========================
-ADD TO CART FUNCTIONALITY
-========================= */
-
+// ============================================
+// ADD TO CART
+// ============================================
 const addToCartButtons = document.querySelectorAll('.card button');
 
 addToCartButtons.forEach((button) => {
@@ -240,22 +264,16 @@ addToCartButtons.forEach((button) => {
         const priceText = card.querySelector('.price')?.textContent || '#0.00';
         const description = card.querySelectorAll('p')[1]?.textContent || '';
 
-        const product = {
-            image,
-            title,
-            price: priceText,
-            description
-        };
+        const product = { image, title, price: priceText, description };
 
         localStorage.setItem('cartProduct', JSON.stringify(product));
         window.location.href = 'cart.html';
     });
 });
 
-/* =========================
-CART PAGE FUNCTIONALITY
-========================= */
-
+// ============================================
+// CART PAGE
+// ============================================
 if (document.body.classList.contains('cart-page') || window.location.pathname.includes('cart.html')) {
     const displayCart = () => {
         const cartContent = document.getElementById('cartContent');
@@ -285,12 +303,8 @@ if (document.body.classList.contains('cart-page') || window.location.pathname.in
                         <p class="price">${product.price}</p>
                         <p>${product.description}</p>
                         <div class="cart-actions">
-                            <button class="payment-btn" onclick="handlePayment()">
-                                Proceed to Payment
-                            </button>
-                            <a href="gallery.html" class="continue-shopping">
-                                Continue Shopping
-                            </a>
+                            <button class="payment-btn" onclick="handlePayment()">Proceed to Payment</button>
+                            <a href="gallery.html" class="continue-shopping">Continue Shopping</a>
                         </div>
                     </div>
                 </div>
@@ -305,10 +319,9 @@ if (document.body.classList.contains('cart-page') || window.location.pathname.in
     displayCart();
 }
 
-/* =========================
-PAYMENT PAGE FUNCTIONALITY
-========================= */
-
+// ============================================
+// PAYMENT PAGE
+// ============================================
 if (document.body.classList.contains('payment-page') || window.location.pathname.includes('payment.html')) {
     const displayPaymentSummary = () => {
         const summaryDiv = document.getElementById('paymentSummary');
@@ -328,11 +341,12 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
 
         const product = JSON.parse(productData);
 
-        // Display product summary
         summaryDiv.innerHTML = `
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center;">
-                <img src="${product.image}" alt="${product.title}" style="width: 100%; border-radius: 12px; height: auto;">
-                <div>
+            <div class="payment-summary-grid">
+                <div class="payment-summary-image">
+                    <img src="${product.image}" alt="${product.title}">
+                </div>
+                <div class="payment-summary-info">
                     <h3>${product.title}</h3>
                     <p class="price" style="font-size: 24px; margin: 10px 0;">${product.price}</p>
                     <p>${product.description}</p>
@@ -340,25 +354,17 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
             </div>
         `;
 
-        // Set transfer amount
         transferAmountSpan.textContent = product.price;
-
-        // Generate QR Code
         generateQRCode(product);
-
-        // Initialize Paystack button
         initializePaystack(product);
     };
 
     const generateQRCode = (product) => {
         const qrContainer = document.getElementById('qrCodeContainer');
         const priceValue = product.price.replace(/[^0-9]/g, '');
-        const amount = parseInt(priceValue) || 0;
-
         const qrData = `TrewJewel Payment\nProduct: ${product.title}\nAmount: ${product.price}`;
 
         qrContainer.innerHTML = '';
-
         const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
 
         qrContainer.innerHTML = `
@@ -374,17 +380,16 @@ if (document.body.classList.contains('payment-page') || window.location.pathname
         if (!paystackPayBtn) return;
 
         const priceValue = product.price.replace(/[^0-9]/g, '');
-        const amount = parseInt(priceValue) * 100; // Paystack expects amount in kobo
+        const amount = parseInt(priceValue) * 100;
 
         paystackPayBtn.addEventListener('click', function() {
-            // Check if Paystack is loaded
             if (typeof PaystackPop === 'undefined') {
                 alert('Payment system is loading. Please try again in a moment.');
                 return;
             }
 
             const handler = PaystackPop.setup({
-                key: 'pk_test_YOUR_PUBLIC_KEY_HERE', // Replace with your actual Paystack public key
+                key: 'pk_test_YOUR_PUBLIC_KEY_HERE',
                 email: 'customer@example.com',
                 amount: amount,
                 ref: 'TrewJewel_' + Math.floor((Math.random() * 1000000000) + 1),

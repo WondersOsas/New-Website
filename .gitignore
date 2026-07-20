@@ -1,0 +1,29 @@
+# =========================
+# Security - NEVER commit these
+# =========================
+.env
+.env.local
+.env.production
+.env.development
+
+# =========================
+# Dependencies
+# =========================
+node_modules/
+
+# =========================
+# SSL Certificates
+# =========================
+certs/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
